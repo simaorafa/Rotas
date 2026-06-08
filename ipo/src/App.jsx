@@ -37,12 +37,52 @@ function Inicio() {
 function ClientesList() {
   return (
     <div>
-      <h2>Página de Clientes</h2>
-      <button className="btn btn-primary">
-        <i className="fas fa-plus"></i> 
-        novo cliente
-      </button>
-      <h2>Lista de Clientes</h2>
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+        <div>
+          <h2 className="mb-1">Clientes</h2>
+          <p className="text-muted mb-0">Página estática de clientes com botões de ação.</p>
+        </div>
+        <div className="mt-3 mt-md-0">
+          <button type="button" className="btn btn-primary mr-2 mb-2">
+            <i className="fa fa-plus mr-1" /> Novo cliente
+          </button>
+          <button type="button" className="btn btn-secondary mr-2 mb-2">
+            <i className="fa fa-pencil mr-1" /> Editar
+          </button>
+          <button type="button" className="btn btn-danger mb-2">
+            <i className="fa fa-trash mr-1" /> Eliminar
+          </button>
+        </div>
+      </div>
+      <div className="card">
+        <div className="card-body">
+          <h5 className="card-title">Lista de clientes</h5>
+        </div>
+        <div className="table-responsive">
+          <table className="table table-striped mb-0">
+            <thead className="thead-dark">
+              <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>NIF</th>
+                <th>Opções</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>001</td>
+                <td>Simao Rafael</td>
+                <td>123456789</td>
+                <td>
+                  <button classname ="btn btn-dark"><i className="fa fa-trash"> </i></button>
+                  <button classname ="btn btn-dark m1-2"><i class="fa fa-eye"></i></button>
+                  <button classname ="btn btn-dark m1-2"><i className="fa fa-pencil"> </i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
