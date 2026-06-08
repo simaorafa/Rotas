@@ -29,15 +29,22 @@ function App() {
 function Inicio() {
   return (
     <div className="jumbotron text-center">
-      <h1>Centro de inspeção de automóveis</h1>
-      <p>IPO-ESDS1</p>
-      <div className="text-center">Texto aqui</div>
-      <p className="mt-2">Outras opções relacionadas: <strong>text-right</strong> → alinha o texto à direita.</p>
+      <h1 className="text-center">Centro de inspeção de automóveis</h1>
+      <p className="text-center">IPO-ESDS1</p>
     </div>
   );
 }
 function ClientesList() {
-  return (<h2>Página de Clientes</h2>);
+  return (
+    <div>
+      <h2>Página de Clientes</h2>
+      <button className="btn btn-primary">
+        <i className="fas fa-plus"></i> 
+        novo cliente
+      </button>
+      <h2>Lista de Clientes</h2>
+    </div>
+  );
 }
 function VeiculosList() {
   return (<h2>Página de Veículos</h2>);
