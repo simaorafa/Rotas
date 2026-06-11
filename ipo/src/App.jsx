@@ -70,13 +70,19 @@ function ClientesList() {
             </thead>
             <tbody>
               <tr>
-                <td>001</td>
-                <td>Simao Rafael</td>
-                <td>123456789</td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td>
-                  <button classname ="btn btn-dark"><i className="fa fa-trash"> </i></button>
-                  <button classname ="btn btn-dark m1-2"><i class="fa fa-eye"></i></button>
-                  <button classname ="btn btn-dark m1-2"><i className="fa fa-pencil"> </i></button>
+                  <button className="btn btn-dark">
+                    <i className="fa fa-pencil" />
+                  </button>
+                  <button className="btn btn-dark ml-2">
+                    <i className="fa fa-eye" />
+                  </button>
+                  <button className="btn btn-dark ml-2">
+                    <i className="fa fa-trash" />
+                  </button>
                 </td>
               </tr>
             </tbody>
