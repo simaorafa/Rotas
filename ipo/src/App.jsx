@@ -1,4 +1,7 @@
+import { useState, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+const API_BASE = 'https://effective-capybara-v665669654wghp5gj-3000.app.github.dev'
 
 function App() {
   return (
@@ -10,7 +13,7 @@ function App() {
           <div className="navbar-nav">
             <Link className="nav-link" to="/clientes">Clientes</Link>
             <Link className="nav-link" to="/veiculos">Veículos</Link>
-            <Link className="nav-link" to="/inspeções">Inspeções</Link>
+            <Link className="nav-link" to="/inspecoes">Inspeções</Link>
           </div>
         </div>
       </nav>
@@ -19,7 +22,7 @@ function App() {
           <Route path="/" element={<Inicio />} />
           <Route path="/clientes" element={<ClientesList />} />
           <Route path="/veiculos" element={<VeiculosList />} />
-          <Route path="/inspeções" element={<InspeçõesList />} />
+          <Route path="/inspecoes" element={<InspecoesList />} />
         </Routes>
       </div>
     </div>
@@ -27,75 +30,111 @@ function App() {
 }
 // Estas páginas serão criadas nas próximas etapas
 function Inicio() {
-  return (
-    <div className="jumbotron text-center">
-      <h1 className="text-center">Centro de inspeção de automóveis</h1>
-      <p className="text-center">IPO-ESDS1</p>
+  return <div className="jumbotron">
+    <div className="text-center">
+      <h1>Centro de Inspeções de Automóveis</h1>
+      <p>IPO - ESDS1</p>
     </div>
-  );
+  </div>
+
 }
+
 function ClientesList() {
+  const [clientes, setClientes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [mensagemErro, setMensagemErro] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(API_BASE + '/clientes');
+      const data = await response.json();
+      if (data.success) {
+        setClientes(data.data);
+      } else {
+        setMensagemErro(data.message);
+      }
+    } catch {
+      setMensagemErro('Erro ao carregar clientes');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const confirmDelete = async (id) => {
+    if (!window.confirm('Tem a certeza que deseja eliminar este cliente?')) return;
+    try {
+      const response = await fetch(API_BASE + '/clientes/' + id, { method: 'DELETE' });
+      const data = await response.json();
+      if (data.success) {
+        fetchData();
+      } else {
+        setMensagemErro(data.message);
+      }
+    } catch {
+      setMensagemErro('Erro ao eliminar cliente');
+    }
+  };
+
+  useEffect(() => {
+    const id = setTimeout(() => { fetchData(); }, 0);
+    return () => clearTimeout(id);
+  }, []);
+  if (loading) return <p>Carregando...</p>;
   return (
-    <div>
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
-        <div>
-          <h2 className="mb-1">Clientes</h2>
-          <p className="text-muted mb-0">Página estática de clientes com botões de ação.</p>
+    <>
+      <div className="row">
+        <div className="col-6">
+          <h2>Clientes</h2>
         </div>
-        <div className="mt-3 mt-md-0">
-          <button type="button" className="btn btn-primary mr-2 mb-2">
-            <i className="fa fa-plus mr-1" /> Novo cliente
-          </button>
-          <button type="button" className="btn btn-secondary mr-2 mb-2">
-            <i className="fa fa-pencil mr-1" /> Editar
-          </button>
-          <button type="button" className="btn btn-danger mb-2">
-            <i className="fa fa-trash mr-1" /> Eliminar
-          </button>
+        <div className="col-6 text-right">
+          <button className="btn btn-dark ml-3" ><i className="fa fa-plus-square" aria-hidden="true"></i> Novo Cliente</button>
+          <button className="btn btn-light ml-3" onClick={fetchData}><i className="fa fa-refresh" aria-hidden="true"></i> Atualizar</button>
         </div>
       </div>
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">Lista de clientes</h5>
+      {mensagemErro && (
+        <div className="alert alert-danger alert-dismissible fade show" role="alert">
+          {mensagemErro}
+          <button type="button" className="close" onClick={() => setMensagemErro('')} aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div className="table-responsive">
-          <table className="table table-striped mb-0">
-            <thead className="thead-dark">
-              <tr>
-                <th>Código</th>
-                <th>Nome</th>
-                <th>NIF</th>
-                <th>Opções</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                  <button className="btn btn-dark">
-                    <i className="fa fa-pencil" />
-                  </button>
-                  <button className="btn btn-dark ml-2">
-                    <i className="fa fa-eye" />
-                  </button>
-                  <button className="btn btn-dark ml-2">
-                    <i className="fa fa-trash" />
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+      )}
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Morada</th>
+            <th>NIF</th>
+            <th>Opções</th>
+          </tr>
+        </thead>
+        <tbody>
+          {clientes.map(cliente => (
+            <tr key={cliente.codcli}>
+              <td>{cliente.codcli}</td>
+              <td>{cliente.nome}</td>
+              <td>{cliente.morada}</td>
+              <td>{cliente.nif}</td>
+              <td style={{ whiteSpace: 'nowrap' }}>
+                <button className="btn btn-dark btn-sm mr-2" ><i className='fa fa-eye' aria-hidden='true'></i></button>
+                <button className="btn btn-dark btn-sm mr-2" ><i className='fa fa-pencil' aria-hidden='true'></i></button>
+                <button className="btn btn-dark btn-sm"
+onClick={() => confirmDelete(cliente.codcli)}> <i className='fa fa-trash' aria-hidden='true'></i>
+</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 }
 function VeiculosList() {
   return (<h2>Página de Veículos</h2>);
 }
-function InspeçõesList() {
+function InspecoesList() {
   return (<h2>Página de Inspeções</h2>);
 }
+
 export default App
