@@ -1,0 +1,15 @@
+info:
+  name: API do proff
+  type: http
+
+http:
+  method: GET
+  url: https://turbo-zebra-wrr4rrpr4wjrhg749-3000.app.github.dev/
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+​
